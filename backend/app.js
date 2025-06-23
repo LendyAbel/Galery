@@ -1,19 +1,14 @@
 const {
   S3Client,
-  PutObjectCommand,
-  DeleteObjectCommand,
   GetObjectCommand,
   ListBucketsCommand,
   ListObjectsV2Command,
 } = require('@aws-sdk/client-s3')
-const multer = require('multer')
 const express = require('express')
-const fs = require('fs')
 
 require('dotenv').config()
 
 const app = express()
-const upload = multer({ dest: 'uploads/' })
 
 const BUCKET = 'gallery-app-project'
 const REGION = 'eu-north-1'

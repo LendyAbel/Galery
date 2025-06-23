@@ -10,6 +10,6 @@ https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/
     -npm install
     -creacion de archivo index.js
     -creacion del archivo app.js
-    -npm install aws-sdk
+    -npm install @aws-sdk/client-s3
     -npm install multer
     -npm install express
