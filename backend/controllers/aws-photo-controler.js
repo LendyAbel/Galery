@@ -1,8 +1,11 @@
 const awsPhotoRouter = require('express').Router()
+const multer = require('multer')
 require('dotenv').config()
+
 const {
   S3Client,
   GetObjectCommand,
+  PutObjectCommand,
   ListBucketsCommand,
   ListObjectsV2Command,
 } = require('@aws-sdk/client-s3')
@@ -10,11 +13,9 @@ const {
 const BUCKET = 'gallery-app-project'
 const REGION = 'eu-north-1'
 
-console.log('AccessKeyId:', process.env.API_AWS_ACCESS_KEY)
-console.log(
-  'SecretAccessKey:',
-  process.env.API_AWS_SECRET_ACCESS_KEY ? '********' : 'NO DEFINIDA'
-)
+// Configura multer para leer archivos desde el body
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
 
 // Configura AWS
 const s3 = new S3Client({
@@ -62,7 +63,7 @@ awsPhotoRouter.get('/allPhotos', async (req, res) => {
     })
     console.log(`GET /allImages`)
 
-    res.json(imageUrls)
+    res.status(200).json(imageUrls)
   } catch (err) {
     console.error('Error al listar imágenes:', err)
     res.status(500).send('Error al listar imágenes')
@@ -82,11 +83,39 @@ awsPhotoRouter.get('/:filename', async (req, res) => {
     const data = await s3.send(command)
     // res.setHeader('Content-Type', data.ContentType || 'image/jpeg')
     console.log(`GET /imagen/${filename}`)
-
     data.Body.pipe(res)
   } catch (err) {
     console.error('Error al obtener la imagen:', err)
     res.status(500).send('No se pudo obtener la imagen')
+  }
+})
+
+awsPhotoRouter.post('/upload', upload.single('file'), async (req, res) => {
+  const file = req.file
+  if (!file) {
+    return res.status(400).send('No se subió ningún archivo')
+  }
+
+  console.log('file: ', file)
+
+  const fileName = `${Date.now()}_${file.originalname}`
+  const params = {
+    Bucket: BUCKET,
+    Key: fileName,
+    Body: file.buffer,
+    ContentType: file.mimetype,
+  }
+
+  try {
+    const command = new PutObjectCommand(params)
+    await s3.send(command)
+
+    const fileUrl = `https://${BUCKET}.s3.${REGION}.amazonaws.com/${fileName}`
+    console.log(`POST ${fileName}`)
+    res.status(200).json({ url: fileUrl })
+  } catch (err) {
+    console.error('Error al subir la imagen:', err)
+    res.status(500).send('Error al subir imagen')
   }
 })
 
