@@ -13,3 +13,6 @@ https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/
     -npm install @aws-sdk/client-s3
     -npm install multer
     -npm install express
+
+## 24/06/2025
+- Implementamos multer para hacer el Upload
