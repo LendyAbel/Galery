@@ -2,8 +2,8 @@ import './photo.css'
 
 const Photo = ({ photo }) => {
   return (
-    <div>
-      <img className='photo' src={photo}></img>
+    <div className='photo-card'>
+      <img className='photo-image' src={photo} alt='uploaded'></img>
     </div>
   )
 }
