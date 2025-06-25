@@ -28,13 +28,11 @@ const Upload = ({ uploadPhoto }) => {
     e.preventDefault()
     e.stopPropagation()
     const droppedFile = e.dataTransfer.files[0]
-    console.log('drop', droppedFile)
     handleFile(droppedFile)
   }
 
   const handleInputChange = e => {
     const selectedtFile = e.target.files[0]
-    console.log('click', selectedtFile)
     handleFile(selectedtFile)
   }
 

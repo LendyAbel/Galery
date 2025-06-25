@@ -5,7 +5,7 @@ const Gallery = ({ photos }) => {
   return (
     <div className='gallery-container'>
       {photos.map((photo, index) => (
-        <Photo key={index} photo={photo} />
+        <Photo key={index} photoUrl={photo.url} />
       ))}
     </div>
   )

@@ -1,9 +1,9 @@
 import './photo.css'
 
-const Photo = ({ photo }) => {
+const Photo = ({ photoUrl }) => {
   return (
     <div className='photo-card'>
-      <img className='photo-image' src={photo} alt='uploaded'></img>
+      <img className='photo-image' src={photoUrl} alt='uploaded'></img>
     </div>
   )
 }
