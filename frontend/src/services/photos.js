@@ -25,8 +25,11 @@ const uploadPhoto = async file => {
 
 const deletePhoto = async file => {
   try {
-    await axios.delete(`${baseUrl}/${file.name}`)
-    console.log(`DELETE done: ${file.name}`)
+    const res = await axios.delete(`${baseUrl}/${file}`)
+    console.log(`DELETE done: ${file}`)
+
+    console.log('res.data:', res.data)
+    return res.data
   } catch (error) {
     console.error('Error al eliminar la imagen: ', error)
   }

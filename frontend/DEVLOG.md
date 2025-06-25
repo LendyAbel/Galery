@@ -1,7 +1,9 @@
 # 🛠️ Dev Log — [Nombre del Proyecto]
 
 Registro cronológico de decisiones, problemas, ideas y tareas detectadas durante el desarrollo.
+
 ## Estructura recomendada por sección
+
 - ✅ `Hecho`: cosas completadas ese día
 - ✨ `En progreso`: tareas actuales en tu rama
 - 🧠 `Ideas surgidas`: cosas que pensaste mientras desarrollabas
@@ -12,7 +14,8 @@ Registro cronológico de decisiones, problemas, ideas y tareas detectadas durant
 
 ---
 
-## 📅 23/06/2025
+## 📅 25/06/2025
 
+### 🧠 Nota
 
-## 24/06/2025
+- [ ]Unificar los returns de el frontend y el backend de las request a http

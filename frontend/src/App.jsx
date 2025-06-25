@@ -5,6 +5,7 @@ import Upload from './components/Upload/Upload'
 
 function App() {
   const [photos, setPhotos] = useState([])
+  console.log(photos)
 
   useEffect(() => {
     fetchPhotos()
@@ -27,7 +28,7 @@ function App() {
       console.log(response)
 
       const newPhotoUrl = response.url
-      setPhotos(prevPhoto => [newPhotoUrl, ...prevPhoto])
+      setPhotos(prevPhotos => [newPhotoUrl, ...prevPhotos])
       console.log('photo uploaded')
     } catch (error) {
       alert('Error al subir la imagen')
@@ -35,9 +36,20 @@ function App() {
     }
   }
 
+  const deletePhoto = async file => {
+    try {
+      const photoDelete = await photoServices.deletePhoto(file)
+
+      const photosAfter = photos.filter(photo => photo !== photoDelete)
+      setPhotos(photosAfter)
+    } catch (error) {
+      console.error('No se pudo borrar la foto', error)
+    }
+  }
+
   return (
     <div>
-      <Gallery photos={photos} />
+      <Gallery photos={photos} deletePhoto={deletePhoto} />
       <Upload uploadPhoto={uploadPhotos} />
     </div>
   )
