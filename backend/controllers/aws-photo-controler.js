@@ -4,10 +4,12 @@ require('dotenv').config()
 
 const {
   S3Client,
-  GetObjectCommand,
-  PutObjectCommand,
   ListBucketsCommand,
   ListObjectsV2Command,
+  GetObjectCommand,
+  PutObjectCommand,
+  DeleteObjectCommand,
+  S3ServiceException,
 } = require('@aws-sdk/client-s3')
 const { json } = require('express')
 
@@ -74,16 +76,13 @@ awsPhotoRouter.get('/allPhotos', async (req, res) => {
 awsPhotoRouter.get('/:filename', async (req, res) => {
   const filename = req.params.filename
 
-  const params = {
-    Bucket: BUCKET,
-    Key: filename,
-  }
+  const params = { Bucket: BUCKET, Key: filename }
 
   try {
     const command = new GetObjectCommand(params)
     const data = await s3.send(command)
     // res.setHeader('Content-Type', data.ContentType || 'image/jpeg')
-    console.log(`GET /imagen/${filename}`)
+    console.log(`GET: /imagen/${filename}`)
     data.Body.pipe(res)
   } catch (err) {
     console.error('Error al obtener la imagen:', err)
@@ -118,6 +117,30 @@ awsPhotoRouter.post('/upload', upload.single('file'), async (req, res) => {
   } catch (err) {
     console.error('Error al subir la imagen:', err)
     res.status(500).send('Error al subir imagen')
+  }
+})
+
+awsPhotoRouter.delete('/:filename', async (req, res) => {
+  const filename = req.params.filename
+  const params = { Bucket: BUCKET, Key: filename }
+
+  try {
+    const command = new DeleteObjectCommand(params)
+    await s3.send(command)
+    console.log(`DELETE:`)
+    res.status(204).json(filename)
+  } catch (error) {
+    if (error instanceof S3ServiceException && error.name === 'NoSuchBucket') {
+      console.error(
+        `Error from S3 while deleting object from ${BUCKET}. The buckect doesn't exist`
+      )
+    } else if (error instanceof S3ServiceException) {
+      console.error(
+        `Error from S3 while deleting object from ${BUCKET}.  ${error.name}: ${error.message}`
+      )
+    } else {
+      console.error(error)
+    }
   }
 })
 

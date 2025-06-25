@@ -15,7 +15,24 @@ https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/
 - 🔧 `Mejoras técnicas`: refactors o reestructuraciones
 - 🐞 `Bugs detectados`: errores que viste pero no corregiste todavía
 
+## Paginas importantes
+
 ---
+
+## 📅 25/06/2025
+
+### 🧠 Notas
+
+- [ ] Unificar los returns de el frontend y el backend de las request a http
+- [ ] Que cuando se haga el drag de un archivo se resalte el campo donde hay que soltarlo
+
+### ✅ Hecho:
+
+- [x] Unificar los returns de el frontend y el backend de las request a http
+
+## 📅 24/06/2025
+
+- Implementamos multer para hacer el Upload
 
 ## 📅 23/06/2025
 
@@ -26,12 +43,3 @@ https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/
   -npm install @aws-sdk/client-s3
   -npm install multer
   -npm install express
-
-## 📅 24/06/2025
-
-- Implementamos multer para hacer el Upload
-
-## 📅 25/06/2025
-
-### 🧠 Notas
--[ ] Que cuando se haga el drag de un archivo se resalte el campo donde hay que soltarlo

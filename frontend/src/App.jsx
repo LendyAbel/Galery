@@ -23,7 +23,6 @@ function App() {
     if (!file) return
     try {
       const newPhoto = await photoServices.uploadPhoto(file)
-
       setPhotos(prevPhotos => [...prevPhotos, newPhoto])
       console.log('photo uploaded')
     } catch (error) {
@@ -31,9 +30,20 @@ function App() {
     }
   }
 
+  const deletePhoto = async file => {
+    try {
+      await photoServices.deletePhoto(file.name)
+      const photosAfter = photos.filter(photo => photo.name !== file.name)
+      setPhotos(photosAfter)
+      console.log('photo deleted')
+    } catch (error) {
+      console.error('No se pudo borrar la foto', error)
+    }
+  }
+
   return (
     <div>
-      <Gallery photos={photos} />
+      <Gallery photos={photos} deletePhoto={deletePhoto} />
       <Upload uploadPhoto={uploadPhotos} />
     </div>
   )

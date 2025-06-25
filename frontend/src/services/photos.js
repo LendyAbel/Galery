@@ -24,4 +24,12 @@ const uploadPhoto = async file => {
   }
 }
 
-export default { getAll, uploadPhoto }
+const deletePhoto = async file => {
+  try {
+    await axios.delete(`${baseUrl}/${file}`)
+  } catch (error) {
+    console.error('Error al eliminar la imagen: ', error)
+  }
+}
+
+export default { getAll, uploadPhoto, deletePhoto }
