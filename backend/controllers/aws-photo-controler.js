@@ -9,6 +9,7 @@ const {
   ListBucketsCommand,
   ListObjectsV2Command,
 } = require('@aws-sdk/client-s3')
+const { json } = require('express')
 
 const BUCKET = 'gallery-app-project'
 const REGION = 'eu-north-1'
@@ -54,16 +55,16 @@ awsPhotoRouter.get('/allPhotos', async (req, res) => {
       return res.json([])
     }
 
-    console.log('Imagenes URLS:')
-    const imageUrls = data.Contents.map(obj => {
-      const Urls = `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`
-
-      console.log(`-${Urls}`)
-      return Urls
+    const content = data.Contents.map(obj => {
+      const files = {
+        url: `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`,
+        name: obj.Key,
+      }
+      return files
     })
-    console.log(`GET /allImages`)
 
-    res.status(200).json(imageUrls)
+    console.log(`GET: /allImages`)
+    res.status(200).json(content)
   } catch (err) {
     console.error('Error al listar imágenes:', err)
     res.status(500).send('Error al listar imágenes')
