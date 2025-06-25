@@ -122,13 +122,13 @@ awsPhotoRouter.post('/upload', upload.single('file'), async (req, res) => {
 
 awsPhotoRouter.delete('/:filename', async (req, res) => {
   const filename = req.params.filename
-  const params = { Buckect: BUCKET, Key: filename }
+  const params = { Bucket: BUCKET, Key: filename }
 
   try {
     const command = new DeleteObjectCommand(params)
     await s3.send(command)
     console.log(`DELETE:`)
-    res.status(204).send()
+    res.status(204).json(filename)
   } catch (error) {
     if (error instanceof S3ServiceException && error.name === 'NoSuchBucket') {
       console.error(

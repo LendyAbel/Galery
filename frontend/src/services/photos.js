@@ -13,7 +13,7 @@ const getAll = async () => {
 const uploadPhoto = async file => {
   const formData = new FormData()
   formData.append('file', file)
-  
+
   try {
     const res = await axios.post(`${baseUrl}/upload`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -26,11 +26,7 @@ const uploadPhoto = async file => {
 
 const deletePhoto = async file => {
   try {
-    const res = await axios.delete(`${baseUrl}/${file}`)
-    console.log(`DELETE done: ${file}`)
-
-    console.log('res.data:', res.data)
-    return res.data
+    await axios.delete(`${baseUrl}/${file}`)
   } catch (error) {
     console.error('Error al eliminar la imagen: ', error)
   }

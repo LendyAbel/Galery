@@ -6,7 +6,7 @@ const Photo = ({ photo, deletePhoto }) => {
   }
   return (
     <div className='photo-card'>
-      <img className='photo-image' src={photo} alt='uploaded'></img>
+      <img className='photo-image' src={photo.url} alt='uploaded'></img>
       <div className='delete-button' onClick={handleDeleteClick}>
         <img
           src='/images/icons8-eliminar-50.png'
