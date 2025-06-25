@@ -11,6 +11,7 @@ const {
   DeleteObjectCommand,
   S3ServiceException,
 } = require('@aws-sdk/client-s3')
+const { json } = require('express')
 
 const BUCKET = 'gallery-app-project'
 const REGION = 'eu-north-1'
@@ -56,15 +57,16 @@ awsPhotoRouter.get('/allPhotos', async (req, res) => {
       return res.json([])
     }
 
-    const imageUrls = data.Contents.map(obj => {
-      const Urls = `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`
-
-      console.log(`'Imagenes URLS:'-${Urls}`)
-      return Urls
+    const photos = data.Contents.map(obj => {
+      const photo = {
+        url: `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`,
+        name: obj.Key,
+      }
+      return photo
     })
-    console.log(`GET: /allImages`)
 
-    res.status(200).json(imageUrls)
+    console.log(`GET: /allImages`)
+    res.status(200).json(photos)
   } catch (err) {
     console.error('Error al listar imágenes:', err)
     res.status(500).send('Error al listar imágenes')
@@ -97,6 +99,8 @@ awsPhotoRouter.post('/upload', upload.single('file'), async (req, res) => {
   console.log('file: ', file)
 
   const fileName = `${Date.now()}_${file.originalname}`
+  const fileUrl = `https://${BUCKET}.s3.${REGION}.amazonaws.com/${fileName}`
+  const newPhoto = { name: fileName, url: fileUrl }
   const params = {
     Bucket: BUCKET,
     Key: fileName,
@@ -108,9 +112,8 @@ awsPhotoRouter.post('/upload', upload.single('file'), async (req, res) => {
     const command = new PutObjectCommand(params)
     await s3.send(command)
 
-    const fileUrl = `https://${BUCKET}.s3.${REGION}.amazonaws.com/${fileName}`
     console.log(`POST ${fileName}`)
-    res.status(200).json({ url: fileUrl })
+    res.status(200).json(newPhoto)
   } catch (err) {
     console.error('Error al subir la imagen:', err)
     res.status(500).send('Error al subir imagen')

@@ -13,6 +13,7 @@ const getAll = async () => {
 const uploadPhoto = async file => {
   const formData = new FormData()
   formData.append('file', file)
+  
   try {
     const res = await axios.post(`${baseUrl}/upload`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },

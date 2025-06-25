@@ -22,17 +22,13 @@ function App() {
 
   const uploadPhotos = async file => {
     if (!file) return
-
     try {
-      const response = await photoServices.uploadPhoto(file)
-      console.log(response)
+      const newPhoto = await photoServices.uploadPhoto(file)
 
-      const newPhotoUrl = response.url
-      setPhotos(prevPhotos => [newPhotoUrl, ...prevPhotos])
+      setPhotos(prevPhotos => [...prevPhotos, newPhoto])
       console.log('photo uploaded')
     } catch (error) {
-      alert('Error al subir la imagen')
-      console.error(error)
+      console.error('Error al subir la imagen', error)
     }
   }
 
