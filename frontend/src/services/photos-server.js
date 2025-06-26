@@ -24,12 +24,24 @@ const uploadPhoto = async file => {
   }
 }
 
-const deletePhoto = async file => {
+const deletePhoto = async fileName => {
   try {
-    await axios.delete(`${baseUrl}/${file}`)
+    await axios.delete(`${baseUrl}/${fileName}`)
   } catch (error) {
     console.error('Error al eliminar la imagen: ', error)
   }
 }
 
-export default { getAll, uploadPhoto, deletePhoto }
+const downloadPhoto = async fileName => {
+  console.log('SERVICES AQQUIIII')
+  try {
+    const res = await axios.get(`${baseUrl}/download/${fileName}`, {
+      responseType: 'blob', // 👈 importante para recibir datos binarios
+    })
+    return res
+  } catch (error) {
+    console.error('Error al descargar la imagen: ', error)
+  }
+}
+
+export default { getAll, uploadPhoto, deletePhoto, downloadPhoto }

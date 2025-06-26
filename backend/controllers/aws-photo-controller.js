@@ -53,15 +53,27 @@ awsPhotoRouter.get('/allPhotos', async (request, response, next) => {
   }
 })
 
-awsPhotoRouter.get('/:filename', async (request, response, next) => {
+awsPhotoRouter.get('/download/:filename', async (request, response, next) => {
   const filename = request.params.filename
   const params = { Bucket: BUCKET, Key: filename }
-
+  console.log('AQQUUIIII')
   try {
     const command = new GetObjectCommand(params)
     const data = await s3.send(command)
-    console.log(`GET: /imagen/${filename}`)
+
+    console.log('DATA', data)
+
+    response.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${filename}"`
+    )
+    response.setHeader(
+      'Content-Type',
+      data.ContentType || 'application/octet-stream'
+    )
+    console.log(`DOWLOAD: /download/${filename}`)
     data.Body.pipe(response)
+    console.log('RESPONSE', response)
   } catch (error) {
     next(error)
   }

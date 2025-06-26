@@ -19,6 +19,12 @@ https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/
 
 ---
 
+## 📅 26/06/2025
+
+### 🐞 Bug al subir foto
+
+- [ ] Arrgelar que cuando se borra una foto y se intenta subir la misma no deja subirla
+
 ## 📅 25/06/2025
 
 ### 🧠 Notas
