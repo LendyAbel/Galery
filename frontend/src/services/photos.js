@@ -6,7 +6,7 @@ const getAll = async () => {
     const res = await axios.get(`${baseUrl}/allPhotos`)
     return res.data
   } catch (error) {
-    console.error('Error al obtener las fotos', error)
+    console.error('Error al obtener las fotos', error.message)
   }
 }
 
@@ -20,7 +20,7 @@ const uploadPhoto = async file => {
     })
     return res.data
   } catch (error) {
-    console.error('Error al subir la imagen', error)
+    console.error('Error al subir la imagen', error.response.data)
   }
 }
 
