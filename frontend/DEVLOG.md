@@ -23,7 +23,7 @@ https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/
 
 ### 🧠 Notas
 
-- [ ] Unificar los returns de el frontend y el backend de las request a http
+- [x] Unificar los returns de el frontend y el backend de las request a http
 - [ ] Que cuando se haga el drag de un archivo se resalte el campo donde hay que soltarlo
 
 ### ✅ Hecho:
