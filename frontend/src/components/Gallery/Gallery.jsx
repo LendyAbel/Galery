@@ -2,6 +2,8 @@ import './gallery.css'
 import Photo from '../Photo/Photo'
 
 const Gallery = ({ photos, deletePhoto }) => {
+
+  if (!photos) return
   
   return (
     <div className='gallery-container'>
