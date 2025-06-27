@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { MdUploadFile, MdCancel } from 'react-icons/md'
 import './upload.css'
 
 const Upload = ({ uploadPhoto }) => {
@@ -11,6 +12,15 @@ const Upload = ({ uploadPhoto }) => {
     await uploadPhoto(file)
     setPreview(null)
     setFile('')
+  }
+
+  //Hnadle boton cancelar
+  const handleCancelClick = () => {
+    setPreview(null)
+    setFile('')
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null
+    }
   }
 
   //Handles de los elementos
@@ -49,9 +59,22 @@ const Upload = ({ uploadPhoto }) => {
         <div className='preview'>
           <img src={preview} alt='Preview' className='preview-image' />
           <p className='file-name'>{file.name}</p>
-          <button type='button' onClick={handleUploadClick}>
-            Subir
-          </button>
+          <div className='actions-buttons'>
+            <button
+              className='upload-button'
+              type='button'
+              onClick={handleUploadClick}
+            >
+              <MdUploadFile /> Subir
+            </button>
+            <button
+              className='cancel-button'
+              type='button'
+              onClick={handleCancelClick}
+            >
+              <MdCancel /> Cancelar
+            </button>
+          </div>
         </div>
       ) : (
         <div
@@ -61,7 +84,7 @@ const Upload = ({ uploadPhoto }) => {
           onDragOver={e => e.preventDefault()}
         >
           <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
-          <p className='formatos'>Formatos aceptados: JPG, PNG, GIF...</p>
+          <p className='format'>Formatos aceptados: JPG, PNG, GIF...</p>
         </div>
       )}
     </div>
