@@ -32,6 +32,7 @@ const Upload = ({ uploadPhoto }) => {
 
   const handleInputClick = () => {
     fileInputRef.current.click()
+    fileInputRef.current.value = null
   }
 
   const handleDrop = e => {
