@@ -3,12 +3,12 @@ import Gallery from './components/Gallery/Gallery'
 import Upload from './components/Upload/Upload'
 
 function App() {
-  const { photos, uploadPhotos, deletePhoto } = usePhotos()
+  const { photos, uploadPhotos, deletePhoto, downloadPhoto } = usePhotos()
 
   return (
     <div>
-      <Gallery photos={photos} deletePhoto={deletePhoto} />
       <Upload uploadPhoto={uploadPhotos} />
+      <Gallery photos={photos} deletePhoto={deletePhoto} downloadPhoto={downloadPhoto} />
     </div>
   )
 }

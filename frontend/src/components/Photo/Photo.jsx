@@ -5,7 +5,7 @@ import './photo.css'
 
 Modal.setAppElement('#root')
 
-const Photo = ({ photo, deletePhoto }) => {
+const Photo = ({ photo, deletePhoto, downloadPhoto }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const clickToOpenModal = () => {
@@ -17,7 +17,9 @@ const Photo = ({ photo, deletePhoto }) => {
     setIsModalOpen(false)
   }
 
-  const handleDownload = () => {}
+  const handleDownload = () => {
+    downloadPhoto(photo)
+  }
 
   return (
     <>
