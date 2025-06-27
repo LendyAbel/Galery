@@ -33,7 +33,6 @@ const deletePhoto = async fileName => {
 }
 
 const downloadPhoto = async fileName => {
-  console.log('SERVICES AQQUIIII')
   try {
     const res = await axios.get(`${baseUrl}/download/${fileName}`, {
       responseType: 'blob', // 👈 importante para recibir datos binarios

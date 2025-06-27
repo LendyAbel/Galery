@@ -56,12 +56,9 @@ awsPhotoRouter.get('/allPhotos', async (request, response, next) => {
 awsPhotoRouter.get('/download/:filename', async (request, response, next) => {
   const filename = request.params.filename
   const params = { Bucket: BUCKET, Key: filename }
-  console.log('AQQUUIIII')
   try {
     const command = new GetObjectCommand(params)
     const data = await s3.send(command)
-
-    console.log('DATA', data)
 
     response.setHeader(
       'Content-Disposition',
@@ -71,9 +68,8 @@ awsPhotoRouter.get('/download/:filename', async (request, response, next) => {
       'Content-Type',
       data.ContentType || 'application/octet-stream'
     )
-    console.log(`DOWLOAD: /download/${filename}`)
     data.Body.pipe(response)
-    console.log('RESPONSE', response)
+    console.log(`DOWLOAD: /download/${filename}`)
   } catch (error) {
     next(error)
   }

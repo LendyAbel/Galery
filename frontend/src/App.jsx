@@ -7,8 +7,8 @@ function App() {
 
   return (
     <div>
-      <Gallery photos={photos} deletePhoto={deletePhoto} downloadPhoto={downloadPhoto} />
       <Upload uploadPhoto={uploadPhotos} />
+      <Gallery photos={photos} deletePhoto={deletePhoto} downloadPhoto={downloadPhoto} />
     </div>
   )
 }
