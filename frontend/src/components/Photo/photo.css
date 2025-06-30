@@ -1,9 +1,10 @@
 .photo-card {
-  width: 100px;
+  width: 150px;
+  height: 150px;
   background-color: white;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px #0000000d;
   transition: transform 0.3s ease;
   cursor: pointer;
 }

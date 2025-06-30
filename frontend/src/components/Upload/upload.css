@@ -6,6 +6,7 @@
   text-align: center;
   transition: border 0.3s ease;
   background-color: #f9f9f9;
+  margin: 5px auto;
 }
 
 .preview {
@@ -28,6 +29,7 @@
   height: 100%;
   cursor: pointer;
   padding: 1rem;
+  border-radius: 12px;
 }
 
 .placeholder:hover {
