@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 import Modal from 'react-modal'
 import { FaTrash, FaDownload, FaTimes } from 'react-icons/fa'
 import './photo.css'
@@ -47,6 +48,12 @@ const Photo = ({ photo, deletePhoto, downloadPhoto }) => {
       </Modal>
     </>
   )
+}
+
+Photo.propTypes = {
+  photo: PropTypes.object.isRequired,
+  deletePhoto: PropTypes.func.isRequired,
+  downloadPhoto: PropTypes.func.isRequired,
 }
 
 export default Photo

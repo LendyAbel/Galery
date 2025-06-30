@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import PropTypes from 'prop-types'
 import { MdUploadFile, MdCancel } from 'react-icons/md'
 import './upload.css'
 
@@ -90,6 +91,10 @@ const Upload = ({ uploadPhoto }) => {
       )}
     </div>
   )
+}
+
+Upload.propTypes = {
+  uploadPhoto: PropTypes.func.isRequired,
 }
 
 export default Upload
