@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react'
+import PropTypes from 'prop-types'
+import { MdUploadFile, MdCancel } from 'react-icons/md'
 import './upload.css'
 
 const Upload = ({ uploadPhoto }) => {
@@ -13,6 +15,15 @@ const Upload = ({ uploadPhoto }) => {
     setFile('')
   }
 
+  //Hnadle boton cancelar
+  const handleCancelClick = () => {
+    setPreview(null)
+    setFile('')
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null
+    }
+  }
+
   //Handles de los elementos
   const handleFile = file => {
     if (!file || !file.type.startsWith('image/')) return
@@ -22,19 +33,18 @@ const Upload = ({ uploadPhoto }) => {
 
   const handleInputClick = () => {
     fileInputRef.current.click()
+    fileInputRef.current.value = null
   }
 
   const handleDrop = e => {
     e.preventDefault()
     e.stopPropagation()
     const droppedFile = e.dataTransfer.files[0]
-    console.log('drop', droppedFile)
     handleFile(droppedFile)
   }
 
   const handleInputChange = e => {
     const selectedtFile = e.target.files[0]
-    console.log('click', selectedtFile)
     handleFile(selectedtFile)
   }
 
@@ -51,9 +61,22 @@ const Upload = ({ uploadPhoto }) => {
         <div className='preview'>
           <img src={preview} alt='Preview' className='preview-image' />
           <p className='file-name'>{file.name}</p>
-          <button type='button' onClick={handleUploadClick}>
-            Subir
-          </button>
+          <div className='actions-buttons'>
+            <button
+              className='upload-button'
+              type='button'
+              onClick={handleUploadClick}
+            >
+              <MdUploadFile /> Subir
+            </button>
+            <button
+              className='cancel-button'
+              type='button'
+              onClick={handleCancelClick}
+            >
+              <MdCancel /> Cancelar
+            </button>
+          </div>
         </div>
       ) : (
         <div
@@ -63,11 +86,15 @@ const Upload = ({ uploadPhoto }) => {
           onDragOver={e => e.preventDefault()}
         >
           <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
-          <p className='formatos'>Formatos aceptados: JPG, PNG, GIF...</p>
+          <p className='format'>Formatos aceptados: JPG, PNG, GIF...</p>
         </div>
       )}
     </div>
   )
+}
+
+Upload.propTypes = {
+  uploadPhoto: PropTypes.func.isRequired,
 }
 
 export default Upload
