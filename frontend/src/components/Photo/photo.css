@@ -56,10 +56,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 9999; /* Increased z-index to ensure modal appears above all other elements */
   width: 100vw;
   height: 100vh;
   padding: 2rem;
+  margin: 0; /* Added margin 0 to prevent any spacing issues */
 }
 
 .modal {
@@ -84,7 +85,7 @@
   top: 2rem;
   display: flex;
   gap: 0.5rem;
-  z-index: 1001;
+  z-index: 10000; /* Increased z-index to ensure buttons appear above modal */
 }
 
 .modal-actions button {
