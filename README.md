@@ -10,7 +10,6 @@ lendyabel-gallery/
 └── frontend/  # React SPA, Vite, UI & animations
 ```
 
-text
 
 - **backend/**: Express & AWS SDK for photo management (upload, download, delete, list).
 - **frontend/**: Responsive, animated React application for user interaction.
@@ -20,9 +19,6 @@ text
 1. **Clone the repository:**
 git clone https://github.com/your-username/lendyabel-gallery.git
 cd lendyabel-gallery
-
-text
-
 2. **Backend setup:** see `/backend/README.md`.
 3. **Frontend setup:** see `/frontend/README.md`.
 
