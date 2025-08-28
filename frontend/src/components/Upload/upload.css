@@ -1,79 +1,153 @@
 .uploader {
-  margin: auto;
-  max-width: 500px;
-  border: 2px dashed #aaa;
-  border-radius: 12px;
+  margin: 2rem auto;
+  max-width: 600px;
+  border: 3px dashed rgba(255, 255, 255, 0.3);
+  border-radius: var(--border-radius);
   text-align: center;
-  transition: border 0.3s ease;
-  background-color: #f9f9f9;
-  margin: 5px auto;
+  transition: var(--transition);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  position: relative;
+}
+
+.uploader::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: var(--transition);
+  z-index: -1;
+}
+
+.uploader:hover::before {
+  opacity: 0.05;
 }
 
 .preview {
-  padding: 1rem;
+  padding: 2rem;
 }
 
 .preview-image {
-  max-height: 100px;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
+  max-height: 120px;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+.preview-image:hover {
+  transform: scale(1.05);
 }
 
 .file-name {
-  font-size: 0.9rem;
-  color: #666;
+  font-size: 1rem;
+  color: #4a5568;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
 }
 
 .placeholder {
   width: 100%;
   height: 100%;
   cursor: pointer;
-  padding: 1rem;
-  border-radius: 12px;
+  padding: 3rem 2rem;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  position: relative;
 }
 
 .placeholder:hover {
-  border-color: #3399ff;
-  background-color: #f0f8ff;
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
 }
 
 .placeholder p {
   margin: 0.5rem 0;
-  color: #555;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.placeholder p:first-child {
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .format {
-  font-size: 0.85rem;
-  color: #888;
+  font-size: 0.9rem;
+  color: #718096;
+  font-style: italic;
+}
+
+.actions-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .preview button {
-  margin-top: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   color: white;
-  padding: 10px 18px;
+  padding: 12px 24px;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   border: none;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
 }
+
 .upload-button {
-  background-color: #6366f1; /* Indigo-600 */
+  background: var(--accent-gradient);
 }
+
 .cancel-button {
-  background-color: #dd3939; /* Gray-800 */
+  background: var(--secondary-gradient);
 }
 
 .preview button:hover {
-  transform: scale(1.03);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
-.upload-button svg {
+.preview button:active {
+  transform: translateY(0);
+}
+
+.upload-button svg,
+.cancel-button svg {
   font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .uploader {
+    margin: 1rem;
+    max-width: none;
+  }
+
+  .placeholder {
+    padding: 2rem 1rem;
+  }
+
+  .actions-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .preview button {
+    width: 100%;
+    max-width: 200px;
+  }
 }
