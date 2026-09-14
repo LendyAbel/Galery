@@ -1,57 +1,143 @@
-import './gallery.css'
-import Photo from '../Photo/Photo'
+import { useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
+import Photo from '../Photo/Photo'
+import Toolbar from '../Toolbar/Toolbar'
+import Upload from '../Upload/Upload'
+import YearSection from '../YearSection/YearSection'
+import EmptyState from '../EmptyState/EmptyState'
+import GallerySkeleton from '../Skeleton/GallerySkeleton'
+import { decoratePhoto } from '../../utils/photoMeta'
 
-const Gallery = ({ photos, deletePhoto, downloadPhoto }) => {
-  if (!photos || photos.length === 0) {
-    return (
-      <motion.div
-        className='gallery-empty'
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h3>🖼️ Tu galería está vacía</h3>
-        <p>¡Sube tu primera foto para comenzar!</p>
-      </motion.div>
-    )
+const DENSITY_GRID = {
+  mosaico: { gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gridAutoRows: 150, gap: 16 },
+  rejilla: { gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 18 },
+}
+
+const Gallery = ({
+  photos,
+  isLoading,
+  uploadPhotos,
+  deletePhoto,
+  downloadPhoto,
+  density,
+  setDensity,
+  sort,
+  setSort,
+  query,
+  album,
+  setAlbum,
+  uploadOpenRef,
+}) => {
+  const decorated = useMemo(() => photos.map(decoratePhoto), [photos])
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return decorated.filter(photo => {
+      const matchesQuery = !q || photo.name.toLowerCase().includes(q) || photo.album.toLowerCase().includes(q)
+      const matchesAlbum = album === 'Todos' || photo.album === album
+      return matchesQuery && matchesAlbum
+    })
+  }, [decorated, query, album])
+
+  const sorted = useMemo(() => {
+    const list = [...filtered]
+    list.sort((a, b) => {
+      const ta = a.date ? a.date.getTime() : 0
+      const tb = b.date ? b.date.getTime() : 0
+      return sort === 'desc' ? tb - ta : ta - tb
+    })
+    return list
+  }, [filtered, sort])
+
+  const groups = useMemo(() => {
+    const map = new Map()
+    sorted.forEach(photo => {
+      const key = photo.year ?? 'Sin fecha'
+      if (!map.has(key)) map.set(key, [])
+      map.get(key).push(photo)
+    })
+    return Array.from(map.entries())
+  }, [sorted])
+
+  const handleResetFilters = () => {
+    setAlbum('Todos')
   }
 
   return (
-    <motion.div
-      className='gallery-container'
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
-      <AnimatePresence>
-        {photos.map((photo, index) => (
-          <motion.div
-            key={photo.id || index}
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: -20 }}
-            transition={{
-              duration: 0.4,
-              delay: index * 0.1,
-              type: 'spring',
-              stiffness: 100,
-            }}
-            layout
-          >
-            <Photo photo={photo} deletePhoto={deletePhoto} downloadPhoto={downloadPhoto} />
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </motion.div>
+    <div className='mx-auto' style={{ maxWidth: 1180, padding: '30px 22px' }}>
+      <div className='flex items-start justify-between flex-wrap gap-4' style={{ marginBottom: 24 }}>
+        <div>
+          <h1 style={{ fontSize: 'clamp(30px, 4.5vw, 44px)', margin: 0 }}>Mis recuerdos</h1>
+          <p style={{ fontSize: 15, color: 'var(--color-neutral-700)', margin: 0 }}>
+            {filtered.length} foto{filtered.length === 1 ? '' : 's'}
+            {album === 'Todos' ? ' en total' : ` en ${album}`}
+          </p>
+        </div>
+        <Toolbar sort={sort} setSort={setSort} density={density} setDensity={setDensity} album={album} setAlbum={setAlbum} />
+      </div>
+
+      <div style={{ marginBottom: 28 }}>
+        <Upload uploadPhoto={uploadPhotos} openRef={uploadOpenRef} />
+      </div>
+
+      {isLoading ? (
+        <GallerySkeleton />
+      ) : filtered.length === 0 ? (
+        <EmptyState onReset={handleResetFilters} />
+      ) : (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
+          {groups.map(([year, groupPhotos]) => (
+            <YearSection key={year} year={year} count={groupPhotos.length}>
+              {density === 'lista' ? (
+                <div className='flex flex-col' style={{ gap: 8 }}>
+                  {groupPhotos.map((photo, index) => (
+                    <Photo
+                      key={photo.name}
+                      photo={photo}
+                      density={density}
+                      index={index}
+                      deletePhoto={deletePhoto}
+                      downloadPhoto={downloadPhoto}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className='grid' style={DENSITY_GRID[density]}>
+                  {groupPhotos.map((photo, index) => (
+                    <Photo
+                      key={photo.name}
+                      photo={photo}
+                      density={density}
+                      index={index}
+                      deletePhoto={deletePhoto}
+                      downloadPhoto={downloadPhoto}
+                    />
+                  ))}
+                </div>
+              )}
+            </YearSection>
+          ))}
+        </motion.div>
+      )}
+    </div>
   )
 }
 
-Gallery.prototype = {
+Gallery.propTypes = {
   photos: PropTypes.array.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  uploadPhotos: PropTypes.func.isRequired,
   deletePhoto: PropTypes.func.isRequired,
   downloadPhoto: PropTypes.func.isRequired,
+  density: PropTypes.string.isRequired,
+  setDensity: PropTypes.func.isRequired,
+  sort: PropTypes.string.isRequired,
+  setSort: PropTypes.func.isRequired,
+  query: PropTypes.string.isRequired,
+  album: PropTypes.string.isRequired,
+  setAlbum: PropTypes.func.isRequired,
+  uploadOpenRef: PropTypes.object.isRequired,
 }
 
 export default Gallery

@@ -42,6 +42,8 @@ awsPhotoRouter.get('/allPhotos', async (request, response, next) => {
       const photo = {
         url: `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`,
         name: obj.Key,
+        date: obj.LastModified,
+        size: obj.Size,
       }
       return photo
     })
@@ -86,7 +88,7 @@ awsPhotoRouter.post(
 
     const fileName = `${Date.now()}_${file.originalname}`
     const fileUrl = `https://${BUCKET}.s3.${REGION}.amazonaws.com/${fileName}`
-    const newPhoto = { name: fileName, url: fileUrl }
+    const newPhoto = { name: fileName, url: fileUrl, date: new Date().toISOString(), size: file.size }
     const params = {
       Bucket: BUCKET,
       Key: fileName,

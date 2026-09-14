@@ -1,16 +1,23 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { MdUploadFile, MdCancel, MdCloudUpload } from "react-icons/md"
+import { UploadCloud, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import './upload.css'
 
-const Upload = ({ uploadPhoto }) => {
+const Upload = ({ uploadPhoto, openRef }) => {
   const [preview, setPreview] = useState(null)
   const [file, setFile] = useState('')
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef(null)
 
-  //Handle del boton subir
+  const handleInputClick = () => {
+    fileInputRef.current.click()
+    fileInputRef.current.value = null
+  }
+
+  useEffect(() => {
+    if (openRef) openRef.current = handleInputClick
+  }, [openRef])
+
   const handleUploadClick = async () => {
     setIsUploading(true)
     try {
@@ -22,7 +29,6 @@ const Upload = ({ uploadPhoto }) => {
     }
   }
 
-  //Hnadle boton cancelar
   const handleCancelClick = () => {
     setPreview(null)
     setFile('')
@@ -31,16 +37,10 @@ const Upload = ({ uploadPhoto }) => {
     }
   }
 
-  //Handles de los elementos
   const handleFile = file => {
     if (!file || !file.type.startsWith('image/')) return
     setPreview(URL.createObjectURL(file))
     setFile(file)
-  }
-
-  const handleInputClick = () => {
-    fileInputRef.current.click()
-    fileInputRef.current.value = null
   }
 
   const handleDrop = e => {
@@ -56,13 +56,20 @@ const Upload = ({ uploadPhoto }) => {
   }
 
   return (
-    <motion.div className='uploader' whileHover={{ scale: 1.02 }} transition={{ type: 'spring', stiffness: 300 }}>
+    <div>
       <input type='file' accept='image/*' ref={fileInputRef} onChange={handleInputChange} style={{ display: 'none' }} />
 
       <AnimatePresence mode='wait'>
         {preview ? (
           <motion.div
-            className='preview'
+            className='flex items-center flex-wrap'
+            style={{
+              gap: 14,
+              padding: '18px 22px',
+              borderRadius: 'var(--radius-lg)',
+              background: 'var(--color-accent-2-100)',
+              border: '2px dashed var(--color-accent-2-400)',
+            }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -70,87 +77,104 @@ const Upload = ({ uploadPhoto }) => {
           >
             <motion.img
               src={preview}
-              alt='Preview'
-              className='preview-image'
+              alt='Vista previa'
+              className='washed'
+              style={{ width: 64, height: 64, borderRadius: 'var(--radius-md)', objectFit: 'cover' }}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.1 }}
             />
-            <motion.p
-              className='file-name'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
+            <p style={{ flex: 1, minWidth: 120, fontSize: 14, fontWeight: 600, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {file.name}
-            </motion.p>
-            <motion.div
-              className='actions-buttons'
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
+            </p>
+            <div className='flex items-center gap-2'>
               <motion.button
-                className='upload-button'
                 type='button'
+                className='btn btn-primary'
                 onClick={handleUploadClick}
                 disabled={isUploading}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
                 {isUploading ? (
                   <>
-                    <motion.div
+                    <motion.span
+                      style={{ display: 'inline-flex' }}
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
                     >
-                      <MdCloudUpload />
-                    </motion.div>
-                    Subiendo...
+                      <UploadCloud size={16} strokeWidth={2.75} />
+                    </motion.span>
+                    Subiendo…
                   </>
                 ) : (
                   <>
-                    <MdUploadFile /> Subir
+                    <UploadCloud size={16} strokeWidth={2.75} />
+                    Subir
                   </>
                 )}
               </motion.button>
               <motion.button
-                className='cancel-button'
                 type='button'
+                className='btn btn-secondary'
                 onClick={handleCancelClick}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
-                <MdCancel /> Cancelar
+                <X size={16} strokeWidth={2.75} />
+                Cancelar
               </motion.button>
-            </motion.div>
+            </div>
           </motion.div>
         ) : (
           <motion.div
-            className='placeholder'
+            className='flex items-center cursor-pointer'
+            style={{
+              gap: 14,
+              padding: '18px 22px',
+              borderRadius: 'var(--radius-lg)',
+              background: 'var(--color-accent-2-100)',
+              border: '2px dashed var(--color-accent-2-400)',
+              transition: 'background .2s ease',
+            }}
             onDrop={handleDrop}
             onClick={handleInputClick}
             onDragOver={e => e.preventDefault()}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'var(--color-accent-2-200)'
+              e.currentTarget.style.borderColor = 'var(--color-accent-2-600)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'var(--color-accent-2-100)'
+              e.currentTarget.style.borderColor = 'var(--color-accent-2-400)'
+            }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            whileHover={{ y: -5 }}
           >
-            <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.1, type: 'spring' }}>
-              <MdCloudUpload style={{ fontSize: '3rem', color: '#667eea', marginBottom: '1rem' }} />
-            </motion.div>
-            <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
-            <p className='format'>Formatos aceptados: JPG, PNG, GIF, WebP</p>
+            <span
+              className='flex items-center justify-center rounded-full shrink-0'
+              style={{ width: 44, height: 44, background: 'var(--color-accent-2-600)' }}
+            >
+              <UploadCloud size={20} strokeWidth={2.75} color='var(--color-bg)' />
+            </span>
+            <div>
+              <p style={{ fontFamily: 'var(--font-heading)', fontSize: 16, margin: 0 }}>Arrastra tus fotos aquí</p>
+              <p style={{ fontSize: 13, color: 'var(--color-accent-2-800)', margin: 0 }}>
+                JPG, PNG, GIF o WebP · hasta 25 MB por archivo
+              </p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   )
 }
 
 Upload.propTypes = {
   uploadPhoto: PropTypes.func.isRequired,
+  openRef: PropTypes.object,
 }
 
 export default Upload

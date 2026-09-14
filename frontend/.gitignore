@@ -12,6 +12,7 @@ node_modules
 dist
 dist-ssr
 *.local
+/design_handoff_galeria_organic
 
 # Editor directories and files
 .vscode/*

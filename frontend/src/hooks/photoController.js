@@ -3,6 +3,8 @@ import photoServices from '../services/photos-server'
 
 const usePhotos = () => {
   const [photos, setPhotos] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [downloadCount, setDownloadCount] = useState(0)
 
   useEffect(() => {
     fetchPhotos()
@@ -14,6 +16,8 @@ const usePhotos = () => {
       setPhotos(photos)
     } catch (error) {
       console.error('No se pudo cargar todas la fotos: ', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -52,12 +56,13 @@ const usePhotos = () => {
       link.click()
       link.remove()
       window.URL.revokeObjectURL(url)
+      setDownloadCount(count => count + 1)
     } catch (error) {
       console.error('No se puedo descargar la foto', error)
     }
   }
 
-  return { photos, uploadPhotos, deletePhoto, downloadPhoto }
+  return { photos, isLoading, downloadCount, uploadPhotos, deletePhoto, downloadPhoto }
 }
 
 export default usePhotos
