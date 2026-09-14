@@ -1,4 +1,4 @@
-const { ListObjectsV2Command, S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { ListObjectsV2Command, S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 
 const BUCKET = 'gallery-app-project';
 const REGION = 'eu-north-1';
@@ -34,7 +34,7 @@ const fetchAllPhotos = async () => {
 };
 
 const uploadPhoto = async (data) => {
-    const fileName = `${Date.now()}_${data.originalname}`;
+    const fileName = data.originalname;
     const fileUrl = `https://${BUCKET}.s3.${REGION}.amazonaws.com/${fileName}`;
     const newPhoto = {
         name: fileName,
@@ -54,4 +54,16 @@ const uploadPhoto = async (data) => {
     return newPhoto
 }
 
-module.exports = { fetchAllPhotos, uploadPhoto };
+const downloadPhoto = async (filename) => {
+    const params = { Bucket: BUCKET, Key: filename };
+    const command = new GetObjectCommand(params);
+    return s3.send(command);
+};
+
+const deletePhoto = async (filename) => {
+    const params = { Bucket: BUCKET, Key: filename };
+    const command = new DeleteObjectCommand(params);
+    await s3.send(command);
+};
+
+module.exports = { fetchAllPhotos, uploadPhoto, downloadPhoto, deletePhoto };

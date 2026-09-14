@@ -11,8 +11,8 @@ const Nav = ({ screen, setScreen, query, setQuery, onRequestUpload }) => {
         backdropFilter: 'blur(10px)',
         borderBottom: '1px solid var(--color-divider)',
       }}
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+      initial={{ y: -20 }}
+      animate={{ y: 0 }}
       transition={{ duration: 0.4 }}
     >
       <button

@@ -13,4 +13,8 @@ awsPhotoRouter.post(
     photoController.upLoadPhoto,
 );
 
+awsPhotoRouter.get('/download/:filename', photoController.downloadPhoto);
+
+awsPhotoRouter.delete('/:filename', photoController.deletePhoto);
+
 module.exports = awsPhotoRouter;

@@ -24,4 +24,33 @@ const upLoadPhoto = async (request, response, next) => {
     }
 };
 
-module.exports = { getAllPhotos, upLoadPhoto };
+const downloadPhoto = async (request, response, next) => {
+    try {
+        const { filename } = request.params;
+        const data = await photoServices.downloadPhoto(filename);
+
+        response.setHeader(
+            'Content-Disposition',
+            `attachment; filename="${filename}"`,
+        );
+        response.setHeader(
+            'Content-Type',
+            data.ContentType || 'application/octet-stream',
+        );
+        data.Body.pipe(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deletePhoto = async (request, response, next) => {
+    try {
+        const { filename } = request.params;
+        await photoServices.deletePhoto(filename);
+        response.status(200).json(filename);
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { getAllPhotos, upLoadPhoto, downloadPhoto, deletePhoto };

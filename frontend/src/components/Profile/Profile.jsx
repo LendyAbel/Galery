@@ -80,12 +80,19 @@ const Profile = ({ photos, downloadCount, email, onLogout, onSelectAlbum }) => {
       <h2 style={{ fontSize: 26, marginBottom: 16 }}>Tus álbumes</h2>
       <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
         {albums.map(([name, { cover, count }]) => (
-          <motion.button
+          <button
             key={name}
             type='button'
             className='text-left cursor-pointer border-0'
-            style={{ background: 'var(--color-neutral-100)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', overflow: 'hidden' }}
-            whileHover={{ boxShadow: 'var(--shadow-md)' }}
+            style={{
+              background: 'var(--color-neutral-100)',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: 'var(--shadow-sm)',
+              overflow: 'hidden',
+              transition: 'box-shadow .2s ease',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.boxShadow = 'var(--shadow-md)' }}
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = 'var(--shadow-sm)' }}
             onClick={() => onSelectAlbum(name)}
           >
             <img src={cover} alt={name} className='washed' style={{ width: '100%', height: 120, objectFit: 'cover' }} />
@@ -95,7 +102,7 @@ const Profile = ({ photos, downloadCount, email, onLogout, onSelectAlbum }) => {
                 {count} foto{count === 1 ? '' : 's'}
               </p>
             </div>
-          </motion.button>
+          </button>
         ))}
       </div>
     </motion.div>

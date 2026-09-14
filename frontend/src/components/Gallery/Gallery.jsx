@@ -1,7 +1,8 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { motion } from 'framer-motion'
 import Photo from '../Photo/Photo'
+import PhotoViewer from '../Photo/PhotoViewer'
 import Toolbar from '../Toolbar/Toolbar'
 import Upload from '../Upload/Upload'
 import YearSection from '../YearSection/YearSection'
@@ -29,6 +30,8 @@ const Gallery = ({
   setAlbum,
   uploadOpenRef,
 }) => {
+  const [openPhoto, setOpenPhoto] = useState(null)
+
   const decorated = useMemo(() => photos.map(decoratePhoto), [photos])
 
   const filtered = useMemo(() => {
@@ -64,6 +67,11 @@ const Gallery = ({
     setAlbum('Todos')
   }
 
+  const handleDelete = photo => {
+    deletePhoto(photo)
+    setOpenPhoto(current => (current && current.name === photo.name ? null : current))
+  }
+
   return (
     <div className='mx-auto' style={{ maxWidth: 1180, padding: '30px 22px' }}>
       <div className='flex items-start justify-between flex-wrap gap-4' style={{ marginBottom: 24 }}>
@@ -97,7 +105,8 @@ const Gallery = ({
                       photo={photo}
                       density={density}
                       index={index}
-                      deletePhoto={deletePhoto}
+                      onOpen={setOpenPhoto}
+                      deletePhoto={handleDelete}
                       downloadPhoto={downloadPhoto}
                     />
                   ))}
@@ -110,7 +119,8 @@ const Gallery = ({
                       photo={photo}
                       density={density}
                       index={index}
-                      deletePhoto={deletePhoto}
+                      onOpen={setOpenPhoto}
+                      deletePhoto={handleDelete}
                       downloadPhoto={downloadPhoto}
                     />
                   ))}
@@ -120,6 +130,13 @@ const Gallery = ({
           ))}
         </motion.div>
       )}
+
+      <PhotoViewer
+        photo={openPhoto}
+        onClose={() => setOpenPhoto(null)}
+        deletePhoto={handleDelete}
+        downloadPhoto={downloadPhoto}
+      />
     </div>
   )
 }
