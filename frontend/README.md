@@ -22,21 +22,35 @@ A responsive, animated React SPA for managing your personal photo gallery.
 
 ## ✨ Features
 
+- Login screen before entering the gallery
 - Drag & drop or select images to upload
-- Gallery with preview and download options
-- Delete images from the gallery
-- Modal preview with detailed controls
-- Responsive, with animated UI
+- Gallery grouped by year, with search, sort (newest/oldest) and grid/list density toggle
+- Album filter (albums are derived from the photo name until the backend supports real albums)
+- Full-screen photo viewer with download and delete actions
+- Profile screen with photo/album stats and download count
+- Loading skeleton and empty-state screen when there are no results
+- Responsive, animated UI (Framer Motion + Tailwind CSS)
 
 ## 🗂️ Folder Structure
 
 ```
 frontend/
 └── src/
-├── components/ # Gallery, Photo, and Upload components
-├── hooks/ # Custom React hook for gallery logic
-├── services/ # API functions
-└── index.css # Global styles
+    ├── components/
+    │   ├── EmptyState/   # No-results screen
+    │   ├── Gallery/       # Main gallery view
+    │   ├── Login/         # Login screen
+    │   ├── Nav/           # Top navigation bar
+    │   ├── Photo/          # Photo card, icon buttons, full-screen viewer
+    │   ├── Profile/       # User profile & stats
+    │   ├── Skeleton/       # Loading placeholders
+    │   ├── Toolbar/        # Sort/density/album controls
+    │   ├── Upload/         # Upload widget
+    │   └── YearSection/    # Groups photos by year
+    ├── hooks/photoController.js   # Custom hook: fetch/upload/delete/download photos
+    ├── services/photos-server.js # Axios calls to the backend API
+    ├── utils/photoMeta.js        # Date parsing, album derivation, size formatting
+    └── index.css / styles/organic.css # Global styles
 ```
 
 ## 🚩 Notes
